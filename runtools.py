@@ -1,16 +1,18 @@
 import importlib
 from maec.misc.options import ScriptOptions
+from maec.package.package import Package
+import maec.utils.merge
 import config
 import argparse
-import sys
 
 parser = argparse.ArgumentParser(description="MAEC Multi-Tool Translator")
 parser.add_argument("input", help="the path to the binary file to be analyzed")
+parser.add_argument("output", help="the path to the binary file to be analyzed")
 parser.add_argument("--md5", "--hash", help="indicates input is an MD5 hash of the file to be fetched and analyzed", action="store_true", default=False)
 parser.add_argument("--verbose", "-v", help="enable verbose output mode", action="store_true", default=False)
 args = parser.parse_args()
 
-outputs = []
+output_packages = []
 
 for module_data in config.modules:
     opts = ScriptOptions()
@@ -25,7 +27,7 @@ for module_data in config.modules:
     if args.md5:
         if hasattr(module, "generate_package_from_md5"):
             try:
-                outputs.append(
+                output_packages.append(
                              module.generate_package_from_md5(args.input, opts)
                              )
                 print "Completed operation for module " + module_data["import_path"]
@@ -36,7 +38,7 @@ for module_data in config.modules:
     else:
         if hasattr(module, "generate_package_from_binary_filepath"):
             try:
-                outputs.append(
+                output_packages.append(
                              module.generate_package_from_binary_filepath(args.input, opts)
                              )
                 print "Completed operation for module " + module_data["import_path"]
@@ -45,7 +47,13 @@ for module_data in config.modules:
         else:
             print "Module " + module_data["import_path"] + " does not support binary conversion; skipping"
             
-for output in outputs:
-    print output
+
+master_package = Package()
+output_subjects = []
+
+for package in output_packages:
+    output_subjects.append(package.malware_subjects[0])
+    
+print maec.utils.merge.merge_malware_subjects(output_subjects)
     
     
