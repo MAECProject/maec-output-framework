@@ -10,6 +10,29 @@ A framework for producing MAEC output from multiple tools at once. Given a binar
 
 Per-module configuration and global configuration options can be set in `config.py`.
 
+The configuration dictionary for a module in the `modules` list looks like:
+
+    {
+        "import_path":"virustotal_to_maec",        # package identifier, used with importlib.import_module
+        
+        "options": {                               # options used to build the ScriptOptions object
+                    "deduplicate_bundles": True,   # implies MalewareSubject::deduplicate_bundles
+                    "dereference_bundles": False,  # implies MalewareSubject::dereference_bundles
+                    "normalize_bundles": True      # implies MalewareSubject::normalize_bundles
+        },
+        
+        "api_key":"1a2b3c4d5e6f7"                  # API key used by this module when contacting a service
+    }
+    
+The `global_config` dictionary currently only uses a `proxies` entry, which should have a dictionary value. The `global_config` dictionary therefore looks like:
+
+    {
+        "proxies": {
+            "http":"http://example.com:80",
+            "https":"http://example.com:80"
+        }
+    }
+
 ## Tool Interface
 
 A conversion module may define any of the following methods, to be called by the framework:

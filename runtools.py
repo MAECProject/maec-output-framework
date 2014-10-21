@@ -4,6 +4,7 @@ from maec.package.package import Package
 import maec.utils.merge
 import config
 import argparse
+import traceback
 
 parser = argparse.ArgumentParser(description="MAEC Multi-Tool Translator")
 parser.add_argument("input", help="the path to the binary file to be analyzed")
@@ -15,10 +16,7 @@ args = parser.parse_args()
 output_packages = []
 
 for module_data in config.modules:
-    opts = ScriptOptions()
-    opts.deduplicate_bundles = module_data["options"].get("deduplicate_bundles", False)
-    opts.dereference_bundles = module_data["options"].get("dereference_bundles", False)
-    opts.normalize_bundles = module_data["options"].get("normalize_bundles", False)
+    opts = module_data["options"]
     
     module = importlib.import_module(module_data["import_path"])
     if hasattr(module, "set_api_key"): module.set_api_key(module_data["api_key"])
@@ -33,6 +31,7 @@ for module_data in config.modules:
                 print "Completed operation for module " + module_data["import_path"]
             except Exception, e:
                 print "Module " + module_data["import_path"] + " failed MD5 lookup/conversion: " + str(e)
+                if args.verbose: print traceback.format_exc()
         else:
             print "Module " + module_data["import_path"] + " does not support MD5 lookup; skipping"
     else:
