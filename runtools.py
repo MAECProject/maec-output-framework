@@ -50,18 +50,7 @@ for module_data in config.modules:
             print "Module " + module_data["import_path"] + " does not support binary conversion; skipping"
             
 
-master_package = Package()
-
-output_subjects = []
-for package in output_packages:
-    output_subjects.append(package.malware_subjects[0])
-    
-# loop over all resulting merged subjects and add them to the package
-# there should only be one, but future functionality may include multiple merge results
-merged_subjects = maec.utils.merge.merge_malware_subjects(output_subjects)
-for merged_subject in merged_subjects:
-    master_package.add_malware_subject(merged_subject)
-
-master_package.to_xml_file(args.output)
+merged_package = maec.utils.merge.merge_packages(output_packages)
+merged_package.to_xml_file(args.output)
 
 print "Wrote output to " + args.output
