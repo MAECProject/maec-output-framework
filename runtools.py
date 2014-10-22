@@ -18,11 +18,13 @@ output_packages = []
 for module_data in config.modules:
     opts = module_data["options"]
     
+    # import module and set its proxy and API key if applicable
     module = importlib.import_module(module_data["import_path"])
     if hasattr(module, "set_api_key"): module.set_api_key(module_data["api_key"])
     if hasattr(module, "set_proxies"): module.set_proxies(config.global_config["proxies"])
     
     if args.md5:
+        # if MD5 is specified and the module accepts MD5s
         if hasattr(module, "generate_package_from_md5"):
             try:
                 output_packages.append(
@@ -35,6 +37,7 @@ for module_data in config.modules:
         else:
             print "Module " + module_data["import_path"] + " does not support MD5 lookup; skipping"
     else:
+        # if binary path is specified and the module supports it
         if hasattr(module, "generate_package_from_binary_filepath"):
             try:
                 output_packages.append(
@@ -48,11 +51,17 @@ for module_data in config.modules:
             
 
 master_package = Package()
-output_subjects = []
 
+output_subjects = []
 for package in output_packages:
     output_subjects.append(package.malware_subjects[0])
     
-print maec.utils.merge.merge_malware_subjects(output_subjects)
-    
-    
+# loop over all resulting merged subjects and add them to the package
+# there should only be one, but future functionality may include multiple merge results
+merged_subjects = maec.utils.merge.merge_malware_subjects(output_subjects)
+for merged_subject in merged_subjects:
+    master_package.add_malware_subject(merged_subject)
+
+master_package.to_xml_file(args.output)
+
+print "Wrote output to " + args.output
