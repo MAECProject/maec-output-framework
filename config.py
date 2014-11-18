@@ -9,7 +9,7 @@ modules = [
         "import_path":"threatexpert_to_maec",
         "options": {
                     "deduplicate_bundles": True,
-                    "dereference_bundles": False,
+                    "dereference_bundles": True,
                     "normalize_bundles": True
         }
     },
@@ -17,17 +17,25 @@ modules = [
         "import_path":"virustotal_to_maec",
         "options": {
                     "deduplicate_bundles": True,
-                    "dereference_bundles": False,
+                    "dereference_bundles": True,
                     "normalize_bundles": True
         },
-        "api_key":""
-    },      
+        "api_key":"REPLACE THIS STRING WITH AN API KEY FROM https://www.virustotal.com"
+    },
+    {
+        "import_path":"pefile_to_maec",
+        "options": {
+                    "deduplicate_bundles": True,
+                    "dereference_bundles": True,
+                    "normalize_bundles": True
+        }
+    },
 ]
 
 global_config = {
     "proxies": {
-        #"http":"",
-        #"https":""
+        #"http":"http://example.com:80",
+        #"https":"http://example.com:80"
     }
 }
 
