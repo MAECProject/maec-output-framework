@@ -23,7 +23,6 @@ for module_data in config.modules:
     if hasattr(module, "set_api_key") and "api_key" in module_data:
         module.set_api_key(module_data["api_key"])
     if hasattr(module, "set_proxies") and "proxies" in config.global_config and len(config.global_config["proxies"]) > 0:
-        print len(config.global_config["proxies"])
         module.set_proxies(config.global_config["proxies"])
     
     if args.md5:
