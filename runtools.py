@@ -19,7 +19,11 @@ for module_data in config.modules:
     opts = module_data["options"]
     
     # import module and set its proxy and API key if applicable
-    module = importlib.import_module(module_data["import_path"])
+    try:
+        module = importlib.import_module(module_data["import_path"])
+    except ImportError:
+        print "Could not find module " + module_data["import_path"]
+        continue
     if hasattr(module, "set_api_key") and "api_key" in module_data:
         module.set_api_key(module_data["api_key"])
     if hasattr(module, "set_proxies") and "proxies" in config.global_config and len(config.global_config["proxies"]) > 0:
