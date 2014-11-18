@@ -20,8 +20,11 @@ for module_data in config.modules:
     
     # import module and set its proxy and API key if applicable
     module = importlib.import_module(module_data["import_path"])
-    if hasattr(module, "set_api_key"): module.set_api_key(module_data["api_key"])
-    if hasattr(module, "set_proxies"): module.set_proxies(config.global_config["proxies"])
+    if hasattr(module, "set_api_key") and "api_key" in module_data:
+        module.set_api_key(module_data["api_key"])
+    if hasattr(module, "set_proxies") and "proxies" in config.global_config and len(config.global_config["proxies"]) > 0:
+        print len(config.global_config["proxies"])
+        module.set_proxies(config.global_config["proxies"])
     
     if args.md5:
         # if MD5 is specified and the module accepts MD5s
@@ -51,6 +54,7 @@ for module_data in config.modules:
             
 
 merged_package = maec.utils.merge.merge_packages(output_packages)
+
 merged_package.to_xml_file(args.output)
 
 print "Wrote output to " + args.output
