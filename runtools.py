@@ -1,16 +1,19 @@
 import importlib
 from maec.misc.options import ScriptOptions
 from maec.package.package import Package
+from cybox.utils import Namespace
 import maec.utils.merge
 import config
 import argparse
 import traceback
 
 parser = argparse.ArgumentParser(description="MAEC Multi-Tool Translator")
-parser.add_argument("input", help="the path to the binary file to be analyzed")
-parser.add_argument("output", help="the path to the binary file to be analyzed")
-parser.add_argument("--md5", "--hash", help="indicates input is an MD5 hash of the file to be fetched and analyzed", action="store_true", default=False)
-parser.add_argument("--verbose", "-v", help="enable verbose output mode", action="store_true", default=False)
+input_group = parser.add_mutually_exclusive_group(required=True)
+input_group.add_argument("--md5", "--hash", help="Indicates input is an MD5 hash of the file to be fetched", action="store_true", default=False)
+input_group.add_argument("--file", help="Indicates input is a file path", action="store_true", default=False)
+parser.add_argument("input", help="The path to the binary file to be analyzed OR the MD5 hash sum to fetch data for")
+parser.add_argument("output", help="The path to the MAEC XML file to which the tool output will be written")
+parser.add_argument("--verbose", "-v", help="Enable verbose output mode", action="store_true", default=False)
 args = parser.parse_args()
 
 output_packages = []
@@ -52,12 +55,14 @@ for module_data in config.modules:
                 print "Completed operation for module " + module_data["import_path"]
             except Exception, e:
                 print "Module " + module_data["import_path"] + " failed binary-to-MAEC conversion: " + str(e)
+                if args.verbose: print traceback.format_exc()
         else:
             print "Module " + module_data["import_path"] + " does not support binary conversion; skipping"
             
 
-merged_package = maec.utils.merge.merge_packages(output_packages)
-
-merged_package.to_xml_file(args.output)
-
-print "Wrote output to " + args.output
+if len(output_packages) > 0:
+    merged_package = maec.utils.merge.merge_packages(output_packages, Namespace("https://github.com/MAECProject/maec-output-framework", "maecOutputFramework"))
+    merged_package.to_xml_file(args.output, { "https://github.com/MAECProject/maec-output-framework":"maecOutputFramework" })
+    print "Wrote output to " + args.output
+else:
+    print "All tools failed to run successfully, so there is no XML to write out."

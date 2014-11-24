@@ -4,7 +4,7 @@ A framework for producing MAEC output from multiple tools at once. Given a binar
 
 ## Usage
 
-    python runtools.py <input file path or MD5> [--md5] [--verbose]
+    python runtools.py (--md5 | --file) <input file path or MD5> <output XML file path> [--verbose]
     
 ## Configuration
 
