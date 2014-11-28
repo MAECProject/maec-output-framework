@@ -24,7 +24,8 @@ Usage
 
 ::
 
-    python runtools.py (--md5 | --file) <input file path or MD5> <output XML file path> [--verbose] [--progress]
+    python runtools.py (--md5 | --file) <input file path or MD5> <output XML file path> 
+                       [--verbose] [--progress]
 
 Given a file argument, each particular tool either inspects the file locally, or submits the file’s hash to an external analysis service. Currently, no tool submits file contents to an external service.
 
