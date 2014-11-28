@@ -13,10 +13,14 @@ input_group.add_argument("--md5", "--hash", help="Indicates input is an MD5 hash
 input_group.add_argument("--file", help="Indicates input is a file path", action="store_true", default=False)
 parser.add_argument("input", help="The path to the binary file to be analyzed OR the MD5 hash sum to fetch data for")
 parser.add_argument("output", help="The path to the MAEC XML file to which the tool output will be written")
-parser.add_argument("--verbose", "-v", help="Enable verbose output mode", action="store_true", default=False)
+parser.add_argument("--verbose", "-v", help="Enable verbose error output mode", action="store_true", default=False)
+parser.add_argument("--progress", "-p", help="Show tool-by-tool output", action="store_true", default=False)
 args = parser.parse_args()
 
 output_packages = []
+
+output_comment_data = {}
+output_comment_data["Created by"] = "MAEC Output Framework (http://github.com/MAECProject/maec-output-framework)"
 
 for module_data in config.modules:
     opts = module_data["options"]
@@ -39,7 +43,8 @@ for module_data in config.modules:
                 output_packages.append(
                              module.generate_package_from_md5(args.input, opts)
                              )
-                print "Completed operation for module " + module_data["import_path"]
+                output_comment_data[module_data["import_path"] + " options"] = opts.to_dict()
+                if args.verbose or args.progress: print "Completed operation for module " + module_data["import_path"]
             except Exception, e:
                 print "Module " + module_data["import_path"] + " failed MD5 lookup/conversion: " + str(e)
                 if args.verbose: print traceback.format_exc()
@@ -52,7 +57,8 @@ for module_data in config.modules:
                 output_packages.append(
                              module.generate_package_from_binary_filepath(args.input, opts)
                              )
-                print "Completed operation for module " + module_data["import_path"]
+                output_comment_data[module_data["import_path"] + " options"] = opts.to_dict()
+                if args.verbose or args.progress: print "Completed operation for module " + module_data["import_path"]
             except Exception, e:
                 print "Module " + module_data["import_path"] + " failed binary-to-MAEC conversion: " + str(e)
                 if args.verbose: print traceback.format_exc()
@@ -62,7 +68,7 @@ for module_data in config.modules:
 
 if len(output_packages) > 0:
     merged_package = maec.utils.merge.merge_packages(output_packages, Namespace("https://github.com/MAECProject/maec-output-framework", "maecOutputFramework"))
-    merged_package.to_xml_file(args.output, { "https://github.com/MAECProject/maec-output-framework":"maecOutputFramework" })
+    merged_package.to_xml_file(args.output, { "https://github.com/MAECProject/maec-output-framework":"maecOutputFramework" }, custom_header=output_comment_data)
     print "Wrote output to " + args.output
 else:
     print "All tools failed to run successfully, so there is no XML to write out."
