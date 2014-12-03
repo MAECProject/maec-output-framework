@@ -1,7 +1,7 @@
 MAEC Output Framework
 =====================
 
-A framework for producing MAEC output from multiple tools at once. Given a binary file or an MD5, the framework script will run the input through a list of MAEC-producing modules and aggregate the output into a single MAEC Package.
+A framework for producing MAEC output from multiple tools at once. Given a binary file or an MD5, the framework script will run the input through a list of MAEC-producing modules and aggregate the output into a single MAEC Package. More specifically, it will create a single MAEC Malware Subject for the input file or MD5, and will capture the output of each individual tool in its own Finding Bundle in the Malware Subject.
 
 BY USING THE MAEC OUTPUT FRAMEWORK, YOU SIGNIFY YOUR ACCEPTANCE OF THE TERMS AND CONDITIONS OF USE. IF YOU DO NOT AGREE TO THESE TERMS, DO NOT USE THE SCRIPT. For more information, please refer to the LICENSE.txt file.
 
@@ -27,7 +27,7 @@ Usage
     python runtools.py (--md5 | --file) <input file path or MD5> <output XML file path> 
                        [--verbose] [--progress]
 
-Given a file argument, each particular tool either inspects the file locally, or submits the file’s hash to an external analysis service. Currently, no tool submits file contents to an external service.
+Given a file argument, each particular tool either inspects the file locally, or submits the file’s hash to an external analysis service. Currently, no tool submits the actual file contents to an external service.
 
 The ``--progress`` argument enables tool-by-tool success messages.
 
@@ -46,15 +46,15 @@ The configuration dictionary for a module in the ``modules`` list looks like:
         "import_path":"virustotal_to_maec",        # package identifier, used with importlib.import_module
         
         "options": {                               # options used to build the ScriptOptions object
-                    "deduplicate_bundles": True,   # implies MalewareSubject::deduplicate_bundles
-                    "dereference_bundles": False,  # implies MalewareSubject::dereference_bundles
-                    "normalize_bundles": True      # implies MalewareSubject::normalize_bundles
+                    "deduplicate_bundles": True,   # implies MalwareSubject::deduplicate_bundles
+                    "dereference_bundles": False,  # implies MalwareSubject::dereference_bundles
+                    "normalize_bundles": True      # implies MalwareSubject::normalize_bundles
         },
         
         "api_key":"1a2b3c4d5e6f7"                  # API key used by this module when contacting a service
     }
 
-The ``global_config`` dictionary currently only uses a ``proxies`` entry, which should have a dictionary value. The ``global_config`` dictionary therefore looks like:
+The ``global_config`` dictionary (applicable to all modules) currently contains only a ``proxies`` entry, which represents a dictionary of proxy servers (HTTP or HTTPS) to use. The ``global_config`` dictionary therefore looks like:
 
 ::
 
@@ -71,8 +71,8 @@ Tool Interface
 A conversion module may define any of the following methods, to be
 called by the framework:
 
--  ``generate_package_from_binary_filepath`` - given an filepath, the function returns a python-maec Pacakge object
--  ``generate_package_from_md5`` - given an MD5 string, the function returns a python-maec Pacakge object
+-  ``generate_package_from_binary_filepath`` - given an filepath, the function returns a python-maec Package object
+-  ``generate_package_from_md5`` - given an MD5 string, the function returns a python-maec Package object
 -  ``set_proxies`` - optionally called to supply proxy information to the module; supplied as a dictionary like ``{ "http": "http://example.com:80", ... }``
 -  ``set_api_key`` - optionally called to supply API key information to the module
 
@@ -81,7 +81,7 @@ If the framework attempts a particular operation, and the module does not suppor
 Tool List
 ---------
 
-Some projects with modules that implement the tool interface are:
+Some projects with modules that currently implement the compatible tool interface are:
 
 -  `PEFile to MAEC`_
 -  `ThreatExpert to MAEC`_
