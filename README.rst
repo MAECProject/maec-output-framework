@@ -1,9 +1,13 @@
 MAEC Output Framework
 =====================
 
-A framework for producing MAEC output from multiple tools at once. Given a binary file or an MD5, the framework script will run the input through a list of MAEC-producing modules and aggregate the output into a single MAEC Package. More specifically, it will create a single MAEC Malware Subject for the input file or MD5, and will capture the output of each individual tool in its own Finding Bundle in the Malware Subject.
+A framework for producing MAEC output from multiple tools at once. 
 
 BY USING THE MAEC OUTPUT FRAMEWORK, YOU SIGNIFY YOUR ACCEPTANCE OF THE TERMS AND CONDITIONS OF USE. IF YOU DO NOT AGREE TO THESE TERMS, DO NOT USE THE SCRIPT. For more information, please refer to the LICENSE.txt file.
+
+Overview
+--------
+Given a binary file or an MD5, the framework script will run the input through a list of MAEC-producing modules and aggregate the output into a single MAEC Package. More specifically, it will create a single MAEC Malware Subject for the input file or MD5, and will capture the output of each individual tool in its own Finding Bundle in the Malware Subject.
 
 Dependencies
 ------------
@@ -12,7 +16,7 @@ This code has been developed and tested under Python 2.7.x and so may not be com
 
 There are two dependencies for this script:
 
-1. The python-maec library >= v4.1.0.8: [`PyPI`_\ ] [`GitHub`_\ ]
+1. The python-maec library >= v4.1.0.10: [`PyPI`_\ ] [`GitHub`_\ ]
 2. The python-cybox library >= v2.1.0.8:
    [`PyPI <https://pypi.python.org/pypi/cybox>`__\ ]
    [`GitHub <https://github.com/CyboxProject/python-cybox>`__\ ]
@@ -27,7 +31,9 @@ Usage
     python runtools.py (--md5 | --file) <input file path or MD5> <output XML file path> 
                        [--verbose] [--progress]
 
-Given a file argument, each particular tool either inspects the file locally, or submits the file’s hash to an external analysis service. Currently, no tool submits the actual file contents to an external service.
+Given a file argument (--file), each particular tool either inspects the file locally, or submits the file’s hash to an external analysis service (to look for any existing analyses for this hash). Currently, no tool submits the actual file contents to an external service.
+
+Given an MD5 hash argument (--md5), each particular tool submits the value to an external analysis service and looks for any existing analyses for this hash.
 
 The ``--progress`` argument enables tool-by-tool success messages.
 
