@@ -7,8 +7,10 @@ import config
 import argparse
 import traceback
 
+__version__ = "v1.0.0-beta1"
+
 def main():
-    parser = argparse.ArgumentParser(description="MAEC Multi-Tool Translator")
+    parser = argparse.ArgumentParser(description="MAEC Multi-Tool Translator " + __version__)
     input_group = parser.add_mutually_exclusive_group(required=True)
     input_group.add_argument("--md5", "--hash", help="Indicates input is an MD5 hash of the file to be fetched", action="store_true", default=False)
     input_group.add_argument("--file", help="Indicates input is a file path", action="store_true", default=False)
