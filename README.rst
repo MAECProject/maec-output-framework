@@ -14,10 +14,10 @@ Dependencies
 
 This code has been developed and tested under Python 2.7.x and so may not be compatible with Python 3.x.
 
-There are two dependencies for this script:
+There are two dependencies for this utility:
 
 1. The python-maec library >= v4.1.0.10: [`PyPI`_\ ] [`GitHub`_\ ]
-2. The python-cybox library >= v2.1.0.8:
+2. The python-cybox library >= v2.1.0.9:
    [`PyPI <https://pypi.python.org/pypi/cybox>`__\ ]
    [`GitHub <https://github.com/CyboxProject/python-cybox>`__\ ]
 
