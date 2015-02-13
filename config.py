@@ -20,7 +20,7 @@ modules = [
                     "dereference_bundles": False,
                     "normalize_bundles": False
         },
-        "api_key":"REPLACE THIS STRING WITH AN API KEY FROM https://www.virustotal.com"
+        "api_key":"b4f3711747f041f050a1501c89f166c99fcff0e7166307ab3ea861d19b19dbcf"
     },
     {
         "import_path":"pefile_to_maec",
@@ -34,7 +34,7 @@ modules = [
 
 global_config = {
     "proxies": {
-        #"http":"http://example.com:80",
+        "http":"http://gatekeeper.mitre.org:80",
         #"https":"http://example.com:80"
     }
 }
