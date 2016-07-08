@@ -1,7 +1,7 @@
 MAEC Output Framework
 =====================
 
-A framework for producing MAEC output from multiple tools at once. 
+A framework for producing `Malware Attribute Enumeration and Characterization (MAEC™) <https://maecproject.github.io/>`_ output from multiple tools at once. 
 
 BY USING THE MAEC OUTPUT FRAMEWORK, YOU SIGNIFY YOUR ACCEPTANCE OF THE TERMS AND CONDITIONS OF USE. IF YOU DO NOT AGREE TO THESE TERMS, DO NOT USE THE SCRIPT. For more information, please refer to the LICENSE.txt file.
 
@@ -98,3 +98,19 @@ Some projects with modules that currently implement the compatible tool interfac
 .. _PEFile to MAEC: https://github.com/MAECProject/pefile-to-maec
 .. _ThreatExpert to MAEC: https://github.com/MAECProject/threatexpert-to-maec
 .. _VirusTotal to MAEC: https://github.com/MAECProject/vt-to-maec
+
+About MAEC
+----------
+
+Malware Attribute Enumeration and Characterization (MAEC™) is a standardized language for sharing structured information about malware based upon attributes such as behaviors, artifacts, and attack patterns.
+
+The goal of the MAEC (pronounced "mike") effort is to provide a basis for transforming malware research and response. MAEC aims to eliminate the ambiguity and inaccuracy that currently exists in malware descriptions and to reduce reliance on signatures. In this way, MAEC seeks to improve human-to-human, human-to-tool, tool-to-tool, and tool-to-human communication about malware; reduce potential duplication of malware analysis efforts by researchers; and allow for the faster development of countermeasures by enabling the ability to leverage responses to previously observed malware instances. The MAEC Language enables correlation, integration, and automation.
+
+Please visit the `MAEC website <https://maecproject.github.io/>`_ for more information about the MAEC Language.
+
+Getting Help
+------------
+
+Join the public `MAEC Community Email Discussion List <https://maec.mitre.org/community/discussionlist.html>`_.
+
+Email the MAEC Developers at maec@mitre.org.
